@@ -8,7 +8,8 @@
     <style>
         .month-card { transition: all 0.2s ease-in-out; }
         .month-card:hover { transform: translateY(-4px); }
-        .locked-card { opacity: 0.6; filter: grayscale(100%); cursor: not-allowed; }
+        .locked-card { opacity: 0.75; filter: grayscale(80%); }
+        .locked-card:hover { opacity: 1; filter: grayscale(0%); border-color: #818cf8; }
     </style>
 </head>
 <body class="bg-slate-50 text-black font-sans min-h-screen flex flex-col">
@@ -29,15 +30,12 @@
                 <path d="M 65 95 C 65 70, 95 70, 95 95 Z" fill="#f59e0b" />
                 
                 <!-- Faces -->
-                <!-- Teacher Face -->
                 <circle cx="45" cy="32" r="1.5" fill="white"/>
                 <circle cx="55" cy="32" r="1.5" fill="white"/>
                 <path d="M 45 39 Q 50 44 55 39" stroke="white" stroke-width="2" stroke-linecap="round" fill="transparent"/>
-                <!-- Kid 1 Face -->
                 <circle cx="16" cy="53" r="1.2" fill="white"/>
                 <circle cx="24" cy="53" r="1.2" fill="white"/>
                 <path d="M 16 58 Q 20 62 24 58" stroke="white" stroke-width="1.5" stroke-linecap="round" fill="transparent"/>
-                <!-- Kid 2 Face -->
                 <circle cx="76" cy="53" r="1.2" fill="white"/>
                 <circle cx="84" cy="53" r="1.2" fill="white"/>
                 <path d="M 76 58 Q 80 62 84 58" stroke="white" stroke-width="1.5" stroke-linecap="round" fill="transparent"/>
@@ -50,34 +48,34 @@
     <main class="flex-1 max-w-7xl w-full mx-auto p-8 lg:p-12">
         <div class="mb-10 border-l-4 border-indigo-600 pl-4">
             <h2 class="text-4xl font-bold text-black mb-2">Academic Year Curriculum</h2>
-            <p class="text-lg text-slate-600">Select an active month to initiate the daily execution manual.</p>
+            <p class="text-lg text-slate-600">Select any month to access its curriculum matrix.</p>
         </div>
 
         <!-- 12 Month Grid -->
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             
-            <!-- January (Locked) -->
-            <div class="bg-white border border-slate-200 rounded-lg p-8 shadow-sm flex flex-col items-center justify-center text-center month-card locked-card">
+            <!-- January -->
+            <a href="january.html" class="bg-white border border-slate-200 rounded-lg p-8 shadow-sm flex flex-col items-center justify-center text-center month-card locked-card hover:shadow-md">
                 <span class="text-slate-400 font-black text-4xl mb-2">01</span>
                 <h3 class="text-xl font-bold text-slate-800 uppercase tracking-widest">January</h3>
                 <span class="mt-4 text-xs font-bold bg-slate-100 text-slate-500 px-3 py-1 rounded-full border border-slate-200">UNAVAILABLE</span>
-            </div>
+            </a>
 
-            <!-- February (Locked) -->
-            <div class="bg-white border border-slate-200 rounded-lg p-8 shadow-sm flex flex-col items-center justify-center text-center month-card locked-card">
+            <!-- February -->
+            <a href="february.html" class="bg-white border border-slate-200 rounded-lg p-8 shadow-sm flex flex-col items-center justify-center text-center month-card locked-card hover:shadow-md">
                 <span class="text-slate-400 font-black text-4xl mb-2">02</span>
                 <h3 class="text-xl font-bold text-slate-800 uppercase tracking-widest">February</h3>
                 <span class="mt-4 text-xs font-bold bg-slate-100 text-slate-500 px-3 py-1 rounded-full border border-slate-200">UNAVAILABLE</span>
-            </div>
+            </a>
 
-            <!-- March (Locked) -->
-            <div class="bg-white border border-slate-200 rounded-lg p-8 shadow-sm flex flex-col items-center justify-center text-center month-card locked-card">
+            <!-- March -->
+            <a href="march.html" class="bg-white border border-slate-200 rounded-lg p-8 shadow-sm flex flex-col items-center justify-center text-center month-card locked-card hover:shadow-md">
                 <span class="text-slate-400 font-black text-4xl mb-2">03</span>
                 <h3 class="text-xl font-bold text-slate-800 uppercase tracking-widest">March</h3>
                 <span class="mt-4 text-xs font-bold bg-slate-100 text-slate-500 px-3 py-1 rounded-full border border-slate-200">UNAVAILABLE</span>
-            </div>
+            </a>
 
-            <!-- April (ACTIVE - Links to april.html) -->
+            <!-- April (ACTIVE) -->
             <a href="april.html" class="bg-white border-2 border-indigo-600 rounded-lg p-8 shadow-md flex flex-col items-center justify-center text-center month-card hover:shadow-lg hover:bg-indigo-50 group">
                 <span class="text-indigo-300 font-black text-4xl mb-2 group-hover:text-indigo-400 transition-colors">04</span>
                 <h3 class="text-2xl font-black text-indigo-900 uppercase tracking-widest">April</h3>
@@ -87,61 +85,61 @@
                 </span>
             </a>
 
-            <!-- May (Locked) -->
-            <div class="bg-white border border-slate-200 rounded-lg p-8 shadow-sm flex flex-col items-center justify-center text-center month-card locked-card">
+            <!-- May -->
+            <a href="may.html" class="bg-white border border-slate-200 rounded-lg p-8 shadow-sm flex flex-col items-center justify-center text-center month-card locked-card hover:shadow-md">
                 <span class="text-slate-400 font-black text-4xl mb-2">05</span>
                 <h3 class="text-xl font-bold text-slate-800 uppercase tracking-widest">May</h3>
                 <span class="mt-4 text-xs font-bold bg-slate-100 text-slate-500 px-3 py-1 rounded-full border border-slate-200">PENDING</span>
-            </div>
+            </a>
 
-            <!-- June (Locked) -->
-            <div class="bg-white border border-slate-200 rounded-lg p-8 shadow-sm flex flex-col items-center justify-center text-center month-card locked-card">
+            <!-- June -->
+            <a href="june.html" class="bg-white border border-slate-200 rounded-lg p-8 shadow-sm flex flex-col items-center justify-center text-center month-card locked-card hover:shadow-md">
                 <span class="text-slate-400 font-black text-4xl mb-2">06</span>
                 <h3 class="text-xl font-bold text-slate-800 uppercase tracking-widest">June</h3>
                 <span class="mt-4 text-xs font-bold bg-slate-100 text-slate-500 px-3 py-1 rounded-full border border-slate-200">PENDING</span>
-            </div>
+            </a>
 
-            <!-- July (Locked) -->
-            <div class="bg-white border border-slate-200 rounded-lg p-8 shadow-sm flex flex-col items-center justify-center text-center month-card locked-card">
+            <!-- July -->
+            <a href="july.html" class="bg-white border border-slate-200 rounded-lg p-8 shadow-sm flex flex-col items-center justify-center text-center month-card locked-card hover:shadow-md">
                 <span class="text-slate-400 font-black text-4xl mb-2">07</span>
                 <h3 class="text-xl font-bold text-slate-800 uppercase tracking-widest">July</h3>
                 <span class="mt-4 text-xs font-bold bg-slate-100 text-slate-500 px-3 py-1 rounded-full border border-slate-200">PENDING</span>
-            </div>
+            </a>
 
-            <!-- August (Locked) -->
-            <div class="bg-white border border-slate-200 rounded-lg p-8 shadow-sm flex flex-col items-center justify-center text-center month-card locked-card">
+            <!-- August -->
+            <a href="august.html" class="bg-white border border-slate-200 rounded-lg p-8 shadow-sm flex flex-col items-center justify-center text-center month-card locked-card hover:shadow-md">
                 <span class="text-slate-400 font-black text-4xl mb-2">08</span>
                 <h3 class="text-xl font-bold text-slate-800 uppercase tracking-widest">August</h3>
                 <span class="mt-4 text-xs font-bold bg-slate-100 text-slate-500 px-3 py-1 rounded-full border border-slate-200">PENDING</span>
-            </div>
+            </a>
 
-            <!-- September (Locked) -->
-            <div class="bg-white border border-slate-200 rounded-lg p-8 shadow-sm flex flex-col items-center justify-center text-center month-card locked-card">
+            <!-- September -->
+            <a href="september.html" class="bg-white border border-slate-200 rounded-lg p-8 shadow-sm flex flex-col items-center justify-center text-center month-card locked-card hover:shadow-md">
                 <span class="text-slate-400 font-black text-4xl mb-2">09</span>
                 <h3 class="text-xl font-bold text-slate-800 uppercase tracking-widest">September</h3>
                 <span class="mt-4 text-xs font-bold bg-slate-100 text-slate-500 px-3 py-1 rounded-full border border-slate-200">PENDING</span>
-            </div>
+            </a>
 
-            <!-- October (Locked) -->
-            <div class="bg-white border border-slate-200 rounded-lg p-8 shadow-sm flex flex-col items-center justify-center text-center month-card locked-card">
+            <!-- October -->
+            <a href="october.html" class="bg-white border border-slate-200 rounded-lg p-8 shadow-sm flex flex-col items-center justify-center text-center month-card locked-card hover:shadow-md">
                 <span class="text-slate-400 font-black text-4xl mb-2">10</span>
                 <h3 class="text-xl font-bold text-slate-800 uppercase tracking-widest">October</h3>
                 <span class="mt-4 text-xs font-bold bg-slate-100 text-slate-500 px-3 py-1 rounded-full border border-slate-200">PENDING</span>
-            </div>
+            </a>
 
-            <!-- November (Locked) -->
-            <div class="bg-white border border-slate-200 rounded-lg p-8 shadow-sm flex flex-col items-center justify-center text-center month-card locked-card">
+            <!-- November -->
+            <a href="november.html" class="bg-white border border-slate-200 rounded-lg p-8 shadow-sm flex flex-col items-center justify-center text-center month-card locked-card hover:shadow-md">
                 <span class="text-slate-400 font-black text-4xl mb-2">11</span>
                 <h3 class="text-xl font-bold text-slate-800 uppercase tracking-widest">November</h3>
                 <span class="mt-4 text-xs font-bold bg-slate-100 text-slate-500 px-3 py-1 rounded-full border border-slate-200">PENDING</span>
-            </div>
+            </a>
 
-            <!-- December (Locked) -->
-            <div class="bg-white border border-slate-200 rounded-lg p-8 shadow-sm flex flex-col items-center justify-center text-center month-card locked-card">
+            <!-- December -->
+            <a href="december.html" class="bg-white border border-slate-200 rounded-lg p-8 shadow-sm flex flex-col items-center justify-center text-center month-card locked-card hover:shadow-md">
                 <span class="text-slate-400 font-black text-4xl mb-2">12</span>
                 <h3 class="text-xl font-bold text-slate-800 uppercase tracking-widest">December</h3>
                 <span class="mt-4 text-xs font-bold bg-slate-100 text-slate-500 px-3 py-1 rounded-full border border-slate-200">PENDING</span>
-            </div>
+            </a>
 
         </div>
     </main>
