@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>May Curriculum - Tetawa School</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .sidebar-scroll { max-height: calc(100vh - 4rem); overflow-y: auto; }
+        .hidden-content { display: none !important; }
+        .tab-active { border-bottom: 4px solid #4f46e5; color: #000; font-weight: 700; background-color: #f5f3ff; }
+        .tab-inactive { color: #000; font-weight: 500; }
+        .tab-inactive:hover { background-color: #f8fafc; }
+    </style>
+</head>
+<body class="bg-slate-50 text-black font-sans h-screen flex overflow-hidden text-lg">
+
+    <!-- Sidebar -->
+    <aside class="w-72 bg-white border-r border-slate-200 flex flex-col z-20 shadow-sm">
+        <div class="p-6 border-b border-slate-200 bg-slate-900 text-white">
+            <h1 class="text-2xl font-bold tracking-tight">May</h1>
+        </div>
+        <div class="flex-1 sidebar-scroll p-4 space-y-2" id="sidebar-menu">
+            <!-- Populated via JS -->
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col h-screen overflow-hidden">
+        <header class="bg-white border-b border-slate-200 px-8 py-5 flex justify-between items-center shadow-sm z-10">
+            <div>
+                <h2 class="text-3xl font-bold text-black" id="header-title">Awaiting Selection</h2>
+                <p class="text-base text-black" id="header-subtitle">Select a day from the sidebar</p>
+            </div>
+            <a href="index.html" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded shadow-sm text-lg font-semibold transition-colors flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                Homepage
+            </a>
+        </header>
+
+        <div class="flex-1 overflow-y-auto bg-slate-50" id="content-area">
+            <!-- Empty State -->
+            <div id="placeholder" class="h-full flex flex-col items-center justify-center text-slate-400">
+                <svg class="w-20 h-20 mb-6 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                <p class="text-xl font-medium text-slate-500">Initiate execution by selecting a day.</p>
+            </div>
+
+            <!-- Content State -->
+            <div id="day-content" class="hidden-content max-w-5xl mx-auto p-8">
+                
+                <!-- Tabs -->
+                <div class="flex border-b border-slate-300 mb-8">
+                    <button onclick="switchTab('math')" id="tab-math" class="flex-1 py-4 text-xl text-center transition-colors tab-active text-black">
+                        Mathematics
+                    </button>
+                    <button onclick="switchTab('eng')" id="tab-eng" class="flex-1 py-4 text-xl text-center transition-colors tab-inactive border-l border-slate-200 text-black">
+                        English
+                    </button>
+                    <button onclick="switchTab('enrich')" id="tab-enrich" class="flex-1 py-4 text-xl text-center transition-colors tab-inactive border-l border-slate-200 text-black">
+                        Enrichment
+                    </button>
+                </div>
+
+                <!-- MATH SECTION -->
+                <div id="section-math" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="md:col-span-1 space-y-6">
+                            <section class="bg-white p-6 rounded shadow-sm border-l-4 border-indigo-600">
+                                <h3 class="text-lg font-bold text-black uppercase tracking-wider mb-2">Goal</h3>
+                                <p id="math-goal" class="text-black font-medium text-lg"></p>
+                            </section>
+                            <section class="bg-white p-6 rounded shadow-sm border-l-4 border-indigo-600">
+                                <h3 class="text-lg font-bold text-black uppercase tracking-wider mb-2">Activity</h3>
+                                <p id="math-activity" class="text-black text-base leading-relaxed"></p>
+                            </section>
+                        </div>
+                        <div class="md:col-span-2">
+                            <section class="bg-white p-6 rounded shadow-sm h-full border border-slate-200">
+                                <h3 class="text-lg font-bold text-black uppercase tracking-wider mb-4 border-b pb-2">Instruction</h3>
+                                <div id="math-teacher" class="prose prose-base prose-slate max-w-none text-black"></div>
+                            </section>
+                        </div>
+                    </div>
+                    <section class="bg-white p-6 rounded shadow-sm border border-slate-200 mt-6">
+                        <div class="flex justify-between items-center mb-6 border-b pb-4">
+                            <h3 class="text-xl font-bold text-black">Worksheet</h3>
+                            <span class="text-base font-bold bg-slate-200 text-black px-3 py-1 rounded">10 TASKS</span>
+                        </div>
+                        <ul id="math-tasks" class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 font-mono text-base list-none p-0 text-black"></ul>
+                    </section>
+                </div>
+
+                <!-- ENGLISH SECTION -->
+                <div id="section-eng" class="hidden-content space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="md:col-span-1 space-y-6">
+                            <section class="bg-white p-6 rounded shadow-sm border-l-4 border-emerald-500">
+                                <h3 class="text-lg font-bold text-black uppercase tracking-wider mb-2">Goal</h3>
+                                <p id="eng-goal" class="text-black font-medium text-lg"></p>
+                            </section>
+                            <section class="bg-white p-6 rounded shadow-sm border-l-4 border-emerald-500">
+                                <h3 class="text-lg font-bold text-black uppercase tracking-wider mb-2">Activity</h3>
+                                <p id="eng-activity" class="text-black text-base leading-relaxed"></p>
+                            </section>
+                        </div>
+                        <div class="md:col-span-2">
+                            <section class="bg-white p-6 rounded shadow-sm h-full border border-slate-200">
+                                <h3 class="text-lg font-bold text-black uppercase tracking-wider mb-4 border-b pb-2">Instruction</h3>
+                                <div id="eng-teacher" class="prose prose-base prose-slate max-w-none text-black"></div>
+                            </section>
+                        </div>
+                    </div>
+                    <section class="bg-white p-6 rounded shadow-sm border border-slate-200 mt-6">
+                        <div class="flex justify-between items-center mb-6 border-b pb-4">
+                            <h3 class="text-xl font-bold text-black">Worksheet</h3>
+                            <span class="text-base font-bold bg-slate-200 text-black px-3 py-1 rounded">10 TASKS</span>
+                        </div>
+                        <ul id="eng-tasks" class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 text-base list-none p-0 text-black"></ul>
+                    </section>
+                </div>
+
+                <!-- ENRICHMENT SECTION -->
+                <div id="section-enrich" class="hidden-content space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="md:col-span-1 space-y-6">
+                            <section class="bg-white p-6 rounded shadow-sm border-l-4 border-amber-500">
+                                <h3 class="text-lg font-bold text-black uppercase tracking-wider mb-2">Subject & Goal</h3>
+                                <div class="mb-3"><span id="enrich-subject" class="bg-amber-100 text-amber-900 font-bold px-3 py-1 rounded text-sm uppercase"></span></div>
+                                <p id="enrich-goal" class="text-black font-medium text-lg"></p>
+                            </section>
+                            <section class="bg-white p-6 rounded shadow-sm border-l-4 border-amber-500">
+                                <h3 class="text-lg font-bold text-black uppercase tracking-wider mb-2">Activity</h3>
+                                <p id="enrich-activity" class="text-black text-base leading-relaxed"></p>
+                            </section>
+                        </div>
+                        <div class="md:col-span-2">
+                            <section class="bg-white p-6 rounded shadow-sm h-full border border-slate-200">
+                                <h3 class="text-lg font-bold text-black uppercase tracking-wider mb-4 border-b pb-2">Instruction</h3>
+                                <div id="enrich-teacher" class="prose prose-base prose-slate max-w-none text-black"></div>
+                            </section>
+                        </div>
+                    </div>
+                    <section class="bg-white p-6 rounded shadow-sm border border-slate-200 mt-6">
+                        <div class="flex justify-between items-center mb-6 border-b pb-4">
+                            <h3 class="text-xl font-bold text-black">Comprehensive Task</h3>
+                            <span class="text-base font-bold bg-amber-200 text-amber-900 px-3 py-1 rounded">1 MASTER TASK</span>
+                        </div>
+                        <div class="p-6 bg-slate-50 border border-slate-200 rounded">
+                            <p id="enrich-task" class="text-xl font-medium text-black leading-relaxed"></p>
+                        </div>
+                    </section>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // --- MAY 20-DAY RIGID DATA STRUCTURE ---
+        const rawData = [
+            // WEEK 1
+            {
+                mathGoal: "Memorize 4x and 6x Tables.",
+                mathTeacher: "She knows 2, 3, 5, 10. The 4 table is just doubling the 2 table (if 3x2=6, then 3x4=12). The 6 table is doubling the 3 table. Teach this efficiency. Do not let her count on her fingers.",
+                mathActivity: "Write the 4x and 6x tables from 1 to 10. Circle the numbers that appear in both (12, 24).",
+                
+                engGoal: "Vowel Teams: 'ee' and 'ea' (Long E).",
+                engTeacher: "Rule: 'When two vowels go walking, the first one does the talking.' Both 'ee' and 'ea' make the Long E sound (/i:/). 'See' and 'Sea' sound identical. She must memorize which spelling belongs to which meaning.",
+                engActivity: "Sorting list. Draw a line down a paper. 'ee' on the left, 'ea' on the right. Dictate words, she must guess the column.",
+                
+                enrichSubject: "Music",
+                enrichGoal: "The Whole Note (4 Beats).",
+                enrichTeacher: "A whole note is an empty circle with NO stem. It lasts for 4 full beats. She must sustain the sound or clap once and hold her hands together for the duration.",
+                enrichActivity: "Singing a single note while counting 1-2-3-4 on fingers.",
+                enrichTask: "Draw a sequence: Whole, Half, Quarter, Quarter. She must perform this rhythm (Hold 4, Hold 2, Clap 1, Clap 1) perfectly in time."
+            },
+            {
+                mathGoal: "Division using 3 and 4.",
+                mathTeacher: "Apply inverse logic immediately. If she knows 4x5=20, she must instantly know 20÷4=5. If she hesitates, she hasn't memorized the table, she's calculating it. Force speed.",
+                mathActivity: "Fact family triangles. Give her the numbers 4, 6, 24. She must write 4x6=24, 6x4=24, 24÷4=6, 24÷6=4.",
+                
+                engGoal: "Vowel Team: 'ea' as Short E (Exception).",
+                engTeacher: "English is broken. Sometimes 'ea' makes a Short E sound (/ɛ/), like in 'head', 'bread', or 'sweat'. Warn her this is a trap. If she reads 'head' with a Long E (heed), correct her instantly.",
+                engActivity: "Trap reading. Mix 'ee' words with the exception 'ea' words to test her vigilance.",
+                
+                enrichSubject: "Social (PKN)",
+                enrichGoal: "Sila 1: Ketuhanan Yang Maha Esa.",
+                enrichTeacher: "The first principle of Pancasila. Teach her that it means recognizing a higher power and respecting others who do the same. It forbids atheism and forbids religious coercion.",
+                enrichActivity: "Recite the 5 principles of Pancasila in Indonesian.",
+                enrichTask: "She must correctly recite Sila 1, point to the star symbol on the Garuda, and explain that it means everyone in Indonesia must be allowed to pray safely."
+            },
+            {
+                mathGoal: "Word problems involving 4, 6, and Division.",
+                mathTeacher: "Do not read the problems for her. The math is useless if she cannot extract the data from an English sentence. Keywords: 'each', 'shared', 'distributed'.",
+                mathActivity: "Highlighting. Blue for numbers, Yellow for the operation keyword.",
+                
+                engGoal: "Fluency reading with 'ee' and 'ea'.",
+                engTeacher: "Move from isolated words to sentences. 'The green tree is near the sea.' She must read smoothly. If she pauses to sound out a word she should know, make her repeat the entire sentence.",
+                engActivity: "Read 5 sentences containing at least two vowel teams each.",
+                
+                enrichSubject: "Science",
+                enrichGoal: "Friction and Resistance.",
+                enrichTeacher: "Why do things stop sliding? Friction. Rough surfaces create more friction than smooth ones. This is why tires have tread and ice is slippery.",
+                enrichActivity: "Slide a toy car on the tile floor, then slide it on a carpet with the exact same force.",
+                enrichTask: "Set up a ramp. Roll a car down it onto a bare floor. Then put a towel at the bottom and roll it again. She must verbally explain why the towel makes the car stop faster (friction grabs the wheels)."
+            },
+            {
+                mathGoal: "Review 2, 3, 4, 5, 6, 10 Tables.",
+                mathTeacher: "Mix them completely. 6x3, 4x5, 10x2, 3x9. If she is relying on skip counting, it will be obvious because she will pause. Break the skip counting habit. Demand instant recall.",
+                mathActivity: "Verbal rapid-fire. You shout the equation, she has 2 seconds to shout the answer.",
+                
+                engGoal: "Sight Words Expansion (Fry 25-50).",
+                engTeacher: "Sight words break phonetic rules. 'They', 'Was', 'Are'. Do not let her sound them out. She must recognize them like she recognizes a face. Immediate visual recall.",
+                engActivity: "Flashcards. Show card for 1 second, turn it face down. She must say the word.",
+                
+                enrichSubject: "Music",
+                enrichGoal: "Combining Notes into Measures.",
+                enrichTeacher: "A measure (or bar) in 4/4 time must contain exactly 4 beats. 4 quarters = 1 measure. 2 halfs = 1 measure. 1 whole = 1 measure.",
+                enrichActivity: "Musical math. Quarter + Quarter = Half.",
+                enrichTask: "You provide a Half Note. She must draw the remaining notes needed to complete a 4-beat measure (e.g., she can draw two Quarter notes, or one Half note). She must prove the math adds up to 4."
+            },
+            {
+                mathGoal: "Week 1 Assessment.",
+                mathTeacher: "Strict worksheet completion. No assistance with reading or calculation. Watch for signs of finger counting.",
+                mathActivity: "Independent testing. 15 minutes.",
+                
+                engGoal: "Week 1 Dictation Assessment.",
+                engTeacher: "Test 'ee', 'ea', and exception 'ea' words. 'Meet' vs 'Meat'. You must give her context in the sentence so she knows which to spell. 'I eat meat.'",
+                engActivity: "10 word dictation.",
+                
+                enrichSubject: "Social (PKN)",
+                enrichGoal: "Sila 2: Kemanusiaan Yang Adil dan Beradab.",
+                enrichTeacher: "Just and Civilized Humanity. Teach her this means no bullying. We treat humans like humans, regardless of their status. We help the injured and defend the weak.",
+                enrichActivity: "Discussing a scenario where someone drops their books.",
+                enrichTask: "She must recite Sila 2, identify its symbol (the Chain), and explain why making fun of someone who is poor or different violates this principle."
+            },
+            
+            // WEEK 2
+            {
+                mathGoal: "Memorize 7x and 8x Tables.",
+                mathTeacher: "These are historically the hardest tables for children. 7x8=56 (5,6,7,8). 8x8=64. Drill them brutally. Write them out repeatedly.",
+                mathActivity: "Write the 7 and 8 tables out twice. Highlight the hardest facts (7x6, 7x8, 8x6).",
+                
+                engGoal: "Vowel Teams: 'ai' and 'ay' (Long A).",
+                engTeacher: "Both make the /eɪ/ sound. Rule: 'ai' is usually in the middle of a word (rain, pain). 'ay' is at the end of a word (play, day). Teach her this spelling trick.",
+                engActivity: "Word sorting. Give her words verbally. She must tell you if it ends with 'ay' or has 'ai' in the middle.",
+                
+                enrichSubject: "Music",
+                enrichGoal: "Rests (Silence in Rhythm).",
+                enrichTeacher: "A quarter rest gets one beat of total silence. It looks like a squiggly line. Music requires spaces between the sounds.",
+                enrichActivity: "Clapping rhythm. When a rest appears, throw hands open instead of clapping.",
+                enrichTask: "Read a rhythm: Quarter, Rest, Quarter, Rest. She must clap on 1, throw hands open on 2, clap on 3, open on 4, keeping perfect metronome time."
+            },
+            {
+                mathGoal: "Financial Math: IDR Addition.",
+                mathTeacher: "Introduce currency. IDR uses thousands. 5,000 + 12,000. Teach her to ignore the three zeros temporarily, add the main numbers (5+12=17), and put the zeros back. Do not overcomplicate the zeros.",
+                mathActivity: "Use real or monopoly money to simulate transactions.",
+                
+                engGoal: "Sentence Structure: Capitalization.",
+                engTeacher: "She speaks fluently, now she must write correctly. A sentence MUST begin with a capital letter. Names MUST be capitalized. If she writes 'budi went to the park', mark it wrong immediately.",
+                engActivity: "Provide 5 sentences with all lowercase letters. She must rewrite them perfectly.",
+                
+                enrichSubject: "Social (PKN)",
+                enrichGoal: "Sila 3: Persatuan Indonesia.",
+                enrichTeacher: "The Unity of Indonesia. We have thousands of islands but one flag. Teach her that prioritizing national unity over tribal or religious superiority is mandatory.",
+                enrichActivity: "Look at a map of Indonesia. Point out how spread out it is.",
+                enrichTask: "She must recite Sila 3, identify the Banyan Tree symbol, and explain why a strong trunk with many roots represents Indonesia's diversity uniting into one nation."
+            },
+            {
+                mathGoal: "Financial Math: IDR Subtraction (Making Change).",
+                mathTeacher: "You have 20,000. The item costs 8,000. How much change? Again, drop the zeros: 20 - 8 = 12. Add zeros back: 12,000. She must grasp the concept of 'change'.",
+                mathActivity: "Play shopkeeper. You give her a 50,000 note to buy a 15,000 item. She must calculate and hand you the change.",
+                
+                engGoal: "Sentence Structure: Punctuation.",
+                engTeacher: "Periods (.), Question Marks (?), Exclamation Points (!). Teach the emotional difference between 'Stop.' and 'Stop!' and the vocal inflection of a question.",
+                engActivity: "Read sentences aloud with the correct inflection based on the punctuation mark.",
+                
+                enrichSubject: "Science",
+                enrichGoal: "Magnetic Force.",
+                enrichTeacher: "Magnets attract iron/steel. They have invisible fields. They repel each other if the same poles face each other. Force without touching.",
+                enrichActivity: "Take a fridge magnet and test 10 objects around the house.",
+                enrichTask: "She must sort 5 objects (e.g., plastic spoon, metal paperclip, coin, eraser, screw) into 'Magnetic' and 'Not Magnetic' piles by testing them, and state what material magnets actually like."
+            },
+            {
+                mathGoal: "Division by 7 and 8.",
+                mathTeacher: "Apply the inverse logic to the new tables. 56 ÷ 8 = 7. 42 ÷ 7 = 6. If she struggled with memorizing the 7 and 8 tables, this will be a disaster. Stop and re-drill the multiplication if she fails here.",
+                mathActivity: "Missing number equations: 7 x ___ = 49.",
+                
+                engGoal: "Writing Application (Long A).",
+                engTeacher: "She must generate sentences using 'ai' and 'ay' words. Demand proper capitalization and punctuation. Correct her spelling ruthlessly.",
+                engActivity: "Write 3 original sentences. Each sentence must contain one 'ai' word and one 'ay' word.",
+                
+                enrichSubject: "Music",
+                enrichGoal: "Sight Reading a 4-Beat Measure.",
+                enrichTeacher: "Combine Quarter notes, Half notes, and Quarter rests into one measure. Total math must equal 4.",
+                enrichActivity: "Draw different combinations on a whiteboard.",
+                enrichTask: "Perform: Quarter, Quarter, Half. Then perform: Half, Quarter, Rest. She must execute both seamlessly back-to-back."
+            },
+            {
+                mathGoal: "Week 2 Assessment: Money and Advanced Tables.",
+                mathTeacher: "Mix 7/8 multiplication, division, and IDR shopkeeper word problems.",
+                mathActivity: "Independent worksheet. 15 minutes.",
+                
+                engGoal: "Week 2 Assessment: Dictation and Editing.",
+                engTeacher: "Dictate sentences, not just words. 'The train will wait all day.' She must spell the vowel teams correctly AND apply capital letters and periods.",
+                engActivity: "Dictate 5 full sentences.",
+                
+                enrichSubject: "Social (PKN)",
+                enrichGoal: "Sila 4: Kerakyatan yang Dipimpin oleh Hikmat Kebijaksanaan...",
+                enrichTeacher: "Democracy guided by inner wisdom. This means we choose leaders and we follow the consensus (Musyawarah). It is the opposite of a dictatorship.",
+                enrichActivity: "Discuss how class leaders or presidents are chosen.",
+                enrichTask: "Recite Sila 4, identify the Bull's Head symbol, and explain that in Indonesia, decisions are made by talking together, not by the strongest person bullying the rest."
+            },
+
+            // WEEK 3
+            {
+                mathGoal: "Memorize 9x Table (The Hand Trick).",
+                mathTeacher: "Teach the 9 table trick using 10 fingers. Put down the finger of the multiplier, the fingers to the left are tens, the right are ones. Once she learns the trick, demand she memorize it so she doesn't need her hands.",
+                mathActivity: "Practice the hand trick from 9x1 to 9x10.",
+                
+                engGoal: "Vowel Teams: 'oa' and 'ow' (Long O).",
+                engTeacher: "'oa' usually sits in the middle (boat, soap). 'ow' usually sits at the end (snow, grow). Warn her that 'ow' can also make an 'ouch' sound (cow), but this week we only focus on the Long O sound.",
+                engActivity: "Read a list of 'oa' and 'ow' words. Emphasize the deep, round 'O' sound.",
+                
+                enrichSubject: "Music",
+                enrichGoal: "Introduction to the Staff and Treble Clef.",
+                enrichTeacher: "Music is written on 5 lines and 4 spaces. The Treble Clef symbol tells us we are playing high notes (usually right hand on piano).",
+                enrichActivity: "Draw the 5 lines and trace a Treble Clef.",
+                enrichTask: "She must correctly draw a 5-line staff on blank paper, draw a Treble Clef at the start, and number the lines 1 to 5 starting from the BOTTOM up."
+            },
+            {
+                mathGoal: "Time Reading: The Clock Face and Hour Hand.",
+                mathTeacher: "Introduce the analog clock. The short hand is the boss; it tells the hour. If it is between 2 and 3, it is still 2. Teach her that it doesn't become 3 until it physically touches the 3.",
+                mathActivity: "Use a toy clock. Move the minute hand to show how the hour hand slowly creeps between numbers.",
+                
+                engGoal: "Vowel Teams: 'ow' exception (The Ouch sound).",
+                engTeacher: "Introduce the second sound of 'ow' (/aʊ/), as in 'cow', 'down', 'brown'. This requires context. If she sees 'bow', she has to know if it's a 'bow and arrow' (Long O) or 'take a bow' (Ouch).",
+                engActivity: "Context reading. Provide sentences where she must guess which sound 'ow' makes based on the sentence meaning.",
+                
+                enrichSubject: "Social (PKN)",
+                enrichGoal: "Sila 5: Keadilan Sosial bagi Seluruh Rakyat Indonesia.",
+                enrichTeacher: "Social Justice for all. This means fairness. Everyone gets access to hospitals, schools, and roads, not just the rich. Emphasize fairness in sharing.",
+                enrichActivity: "Discuss sharing a cake fairly vs. unfairly.",
+                enrichTask: "Recite Sila 5, identify the Rice and Cotton symbol (food and clothing for all), and explain why it is wrong for one person to hoard all the toys while others have none."
+            },
+            {
+                mathGoal: "Time Reading: The Minute Hand (5-minute intervals).",
+                mathTeacher: "The long hand is the multiplier. Pointing at 4 means 4 x 5 = 20 minutes. Link this directly to her 5x table mastery. This is why we learned tables first.",
+                mathActivity: "Call out a number (1-12). She must instantly yell out the minute equivalent (e.g., You say '8', she says '40').",
+                
+                engGoal: "Reading Comprehension: Who, What, Where.",
+                engTeacher: "Stop decoding focus. Start comprehension focus. Provide a short paragraph. She must read it and immediately answer explicitly stated facts. No guessing. The answers must be in the text.",
+                engActivity: "Read a 4-sentence story. Answer 3 written questions.",
+                
+                enrichSubject: "Science",
+                enrichGoal: "States of Matter (Solid, Liquid, Gas).",
+                enrichTeacher: "Solid holds its shape. Liquid takes the shape of the container. Gas fills the entire space. Use water as the universal example (Ice, Water, Steam).",
+                enrichActivity: "Put an ice cube in a cup and watch it melt. Blow up a balloon to trap gas.",
+                enrichTask: "Point to three things in the room. She must accurately classify a chair (Solid), a glass of milk (Liquid), and the air from a fan (Gas), justifying her answers."
+            },
+            {
+                mathGoal: "Time Reading: Half-past and Quarter-past.",
+                mathTeacher: "Introduce the vocabulary. 'Half-past' means 30 minutes. 'Quarter-past' means 15 minutes. 'O-clock' means 00. Ensure she connects 'quarter' to the number 3 on the clock face.",
+                mathActivity: "Draw clock faces. You say 'Quarter past 4', she must draw the hands correctly.",
+                
+                engGoal: "Reading Comprehension: Sequencing.",
+                engTeacher: "She must understand the order of events. First, Next, Then, Last. If she can read but cannot sequence the events, she is not actually comprehending the narrative.",
+                engActivity: "Read a short story about making a sandwich. She must re-order 4 mixed-up sentences into the correct chronological order.",
+                
+                enrichSubject: "Music",
+                enrichGoal: "High vs. Low on the Staff.",
+                enrichTeacher: "Notes written higher up on the 5 lines sound higher. Notes written lower sound lower. Connect visual placement to auditory pitch.",
+                enrichActivity: "Draw a note on the bottom line and a note on the top line.",
+                enrichTask: "You draw three notes progressing upward on the staff. She must sing any pitch, but her voice must physically rise in pitch matching the visual stairs of the notes."
+            },
+            {
+                mathGoal: "Week 3 Assessment: 9x Table and Time.",
+                mathTeacher: "Mix 9 table equations, division, and clock faces. Do not help her read the clock.",
+                mathActivity: "Independent worksheet. Draw hands on clocks and solve equations.",
+                
+                engGoal: "Week 3 Assessment: Comprehension & Dictation.",
+                engTeacher: "Dictate 'oa' and 'ow' words. Then, a short reading comprehension test requiring written answers in full sentences.",
+                engActivity: "15 minute independent test.",
+                
+                enrichSubject: "Social (PKN)",
+                enrichGoal: "Adab Makan (Dining Etiquette).",
+                enrichTeacher: "Indonesian cultural norm: Eating with the right hand is mandatory. Do not speak with a full mouth. Sit down to eat/drink, do not walk around.",
+                enrichActivity: "Set the table and simulate a meal.",
+                enrichTask: "She must execute a simulated meal perfectly: Wash hands, sit down, wait for elders to start, use ONLY the right hand to take food, and not speak while chewing."
+            },
+
+            // WEEK 4
+            {
+                mathGoal: "Basic Fractions: Halves.",
+                mathTeacher: "A fraction is breaking a whole into EQUAL parts. If it's not equal, it's not a fraction. Teach 1/2. Show her that 1/2 of 10 is the same as 10 ÷ 2. Connect fractions to division instantly.",
+                mathActivity: "Take a piece of paper, tear it unevenly. Ask 'Is this a half?'. (No). Fold it perfectly and tear. Ask again. (Yes).",
+                
+                engGoal: "R-Controlled Vowels: 'ar' (The Pirate Sound).",
+                engTeacher: "The 'r' takes over the vowel. 'Car', 'Star', 'Farm'. It does not sound like short 'a'. It makes a deep /ɑr/ sound. Ensure the 'r' is tight, not rolled.",
+                engActivity: "Read 'ar' words. Highlight the 'ar' combination in red before reading.",
+                
+                enrichSubject: "Music",
+                enrichGoal: "Rhythm Review (Dictation).",
+                enrichTeacher: "Test her ability to translate sound back into written symbols. You clap, she writes.",
+                enrichActivity: "Review the symbols for Quarter, Half, and Whole notes.",
+                enrichTask: "You clap a rhythm (Clap, Clap, Clap-and-hold-for-2). She must correctly draw 'Quarter, Quarter, Half' on her paper."
+            },
+            {
+                mathGoal: "Basic Fractions: Quarters (1/4).",
+                mathTeacher: "A quarter is half of a half. Divide a circle into 4 equal pieces. Connect this to the clock face ('Quarter-past'). 1/4 of 12 is 12 ÷ 4 = 3.",
+                mathActivity: "Draw circles and squares. Ask her to shade in exactly 1/4 of the shape.",
+                
+                engGoal: "R-Controlled: 'er', 'ir', 'ur' (The Identical Triplets).",
+                engTeacher: "All three of these make the EXACT same sound (/ɜr/). Her, Bird, Turn. She must rely completely on visual memory for spelling, as phonetics will not help her choose between them.",
+                engActivity: "Word sorting. Three columns. Give her the words, she must memorize which spelling block they belong to.",
+                
+                enrichSubject: "Social (PKN)",
+                enrichGoal: "Adab Bertamu (Visiting Etiquette).",
+                enrichTeacher: "Cultural norms for visiting a neighbor's house. Knock gently, say 'Assalamualaikum' or 'Permisi', do not enter until invited, sit properly, and eat/drink only after being asked.",
+                enrichActivity: "Roleplay visiting the living room.",
+                enrichTask: "She must walk to a closed door, knock, ask permission to enter, sit with her knees together, and politely accept a pretend glass of water using her right hand."
+            },
+            {
+                mathGoal: "Basic Fractions: Thirds (1/3).",
+                mathTeacher: "Divide a shape into 3 equal pieces. Connect to division: 1/3 of 15 is 15 ÷ 3 = 5. Do not let her forget the division connection.",
+                mathActivity: "Give her 12 beans. Tell her to find 1/3 of them by dealing them into 3 equal piles.",
+                
+                engGoal: "R-Controlled: 'or'.",
+                engTeacher: "Makes the /ɔr/ sound. Fork, Corn, Horn. Contrast it heavily with 'ar' so she hears the difference between 'Form' and 'Farm'.",
+                engActivity: "Minimal pairs reading. Port/Part, Form/Farm, Born/Barn.",
+                
+                enrichSubject: "Science",
+                enrichGoal: "The Five Senses (Isolation).",
+                enrichTeacher: "Sight, Sound, Smell, Taste, Touch. We use them together, but scientists isolate them to test theories.",
+                enrichActivity: "Blindfold test.",
+                enrichTask: "Blindfold her. Place a slice of apple or cucumber under her nose while plugging her nose. Have her taste it. Explain that smell heavily impacts our ability to taste flavor."
+            },
+            {
+                mathGoal: "Data and Graphing: Reading a Bar Graph.",
+                mathTeacher: "Provide a simple bar graph (e.g., Favorite Colors). Teach her to look at the X-axis (bottom) for the category, and the Y-axis (side) for the number. She must trace the top of the bar to the number line.",
+                mathActivity: "Analyze a pre-drawn graph. Answer 'Which is most?', 'Which is least?', 'How many more red than blue?'.",
+                
+                engGoal: "Writing Structure: The 3-Sentence Paragraph.",
+                engTeacher: "Topic sentence, Detail sentence, Concluding sentence. Do not accept a scattered list of thoughts. 'I have a dog. He is brown. I love my dog.' Keep it mechanically perfect.",
+                engActivity: "Give her a prompt: 'Describe your favorite toy.' She must write exactly 3 structurally perfect sentences.",
+                
+                enrichSubject: "Music",
+                enrichGoal: "The Musical Alphabet (A-B-C-D-E-F-G).",
+                enrichTeacher: "Music only uses 7 letters. After G, it goes back to A. Teach her to recite it forwards and backwards.",
+                enrichActivity: "Recite A-B-C-D-E-F-G, then G-F-E-D-C-B-A.",
+                enrichTask: "Start on a random letter (e.g., D) and make her recite the next 4 letters in the musical alphabet going up, wrapping around properly (D, E, F, G, A)."
+            },
+            {
+                mathGoal: "Week 4 Assessment: Fractions and Graphs.",
+                mathTeacher: "Mix fraction logic (shapes and sets) with a graph reading exercise.",
+                mathActivity: "Independent worksheet. 15 minutes.",
+                
+                engGoal: "Week 4 Assessment: R-Controlled Dictation & Paragraph.",
+                engTeacher: "Dictate words with 'ar, er, ir, or, ur'. Then demand a 3-sentence paragraph on a new prompt without your help.",
+                engActivity: "Independent test.",
+                
+                enrichSubject: "Social (PKN)",
+                enrichGoal: "Gotong Royong in the Neighborhood (Kerja Bakti).",
+                enrichTeacher: "Expand Week 1's lesson from the house to the street. In Indonesia, neighbors clean the gutters and streets together. It prevents floods and builds community.",
+                enrichActivity: "Discuss why one dirty gutter affects the whole street.",
+                enrichTask: "Take a trash bag outside and spend 10 minutes cleaning up the immediate area outside your gate/yard. She must explain why cleaning public space is a shared duty."
+            }
+        ];
+
+        // --- DYNAMIC TASK GENERATORS ---
+        function getRand(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+        function getRandNum(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+        
+        function shuffleArray(array) {
+            let shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        function generateTasks(dayIndex) {
+            let math = [];
+            let eng = [];
+            let week = Math.floor(dayIndex / 5) + 1;
+            let day = (dayIndex % 5) + 1;
+
+            // Math Generation Logic for MAY
+            if (week === 1) { // 4, 6 tables & division
+                for(let i=0; i<10; i++) {
+                    let m = getRand([4, 6]);
+                    let v = getRandNum(2, 10);
+                    let isDiv = getRand([true, false]);
+                    
+                    if (day === 5 && i > 6) { // Word problems
+                         math.push(`Problem: 24 sweets shared by 4 kids. Each gets: ___`);
+                    } else if (isDiv || day === 2) {
+                        let div = getRand([3, 4, 6]);
+                        let ans = getRandNum(2, 10);
+                        math.push(`${div * ans} ÷ ${div} = _______`);
+                    } else { 
+                        math.push(`${m} x ${v} = _______`);
+                    }
+                }
+            } 
+            else if (week === 2) { // 7, 8 tables & IDR Currency
+                for(let i=0; i<10; i++) {
+                    if (day === 2 || day === 3 || (day === 5 && i > 5)) { // Money Math
+                        let a = getRandNum(10, 50) * 1000;
+                        let b = getRandNum(5, 20) * 1000;
+                        let op = day === 3 ? '-' : getRand(['+', '-']);
+                        if (op === '-' && b > a) { let t = a; a = b; b = t; }
+                        
+                        if (day === 5 && i > 7) {
+                            math.push(`You have ${a}. Toy costs ${b}. Change? _______`);
+                        } else {
+                            math.push(`IDR ${a} ${op} IDR ${b} = _______`);
+                        }
+                    } else { // 7 & 8 tables
+                        let m = getRand([7, 8]); let v = getRandNum(2, 10);
+                        let isDiv = day === 4 ? true : false;
+                        if(isDiv) {
+                            math.push(`${m * v} ÷ ${m} = _______`);
+                        } else {
+                            math.push(`${m} x ${v} = _______`);
+                        }
+                    }
+                }
+            }
+            else if (week === 3) { // 9 table & Time
+                for(let i=0; i<10; i++) {
+                    if (day === 2 || day === 3 || day === 4 || (day === 5 && i > 5)) { // Time
+                        if (day === 2) math.push(`Short hand between 4 and 5. Hour is: ___`);
+                        else if (day === 3) math.push(`Minute hand on ${getRandNum(1,11)}. Mins past: ___`);
+                        else if (day === 4) math.push(`Quarter-past ${getRandNum(1,12)} = ___ : ___`);
+                        else math.push(`Half-past ${getRandNum(1,12)} = ___ : ___`);
+                    } else { // 9 table
+                        let v = getRandNum(2, 10);
+                        math.push(`9 x ${v} = _______`);
+                    }
+                }
+            }
+            else if (week === 4) { // Fractions & Graphs
+                for(let i=0; i<10; i++) {
+                    if (day === 4 || (day === 5 && i > 5)) { // Graphs (text sim)
+                        math.push(`Graph: Red=5, Blue=8. How many more Blue? ___`);
+                    } else { // Fractions
+                        let frac = day === 1 ? 2 : day === 2 ? 4 : day === 3 ? 3 : getRand([2,3,4]);
+                        let ans = getRandNum(2, 6);
+                        let total = frac * ans;
+                        math.push(`1/${frac} of ${total} is = _______`);
+                    }
+                }
+            }
+
+            // May English Pools
+            const eeList = ['see','tree','meet','feet','week','keep','deep','sleep','green','teeth','beep','weed'];
+            const eaList = ['sea','tea','meat','read','leaf','clean','speak','dream','beach','peach','team','leap'];
+            const eaExcList = ['head','bread','sweat','deaf','thread','health','wealth','meant','heavy','ready','tread'];
+            const aiList = ['rain','mail','tail','wait','pain','brain','train','sail','paint','chain','jail','maid'];
+            const ayList = ['day','play','say','way','pay','may','stay','tray','clay','pray','ray','gray'];
+            const oaList = ['boat','coat','soap','goat','road','toad','float','coal','loaf','coach','toast','load'];
+            const owList = ['snow','blow','row','show','slow','grow','throw','bowl','low','crow','glow','mow'];
+            const arList = ['car','star','farm','dark','hard','part','yard','smart','shark','bark','park','chart'];
+            const erirurList = ['her','bird','turn','term','girl','burn','fern','dirt','curl','clerk','shirt','hurt'];
+            const orList = ['fork','corn','horn','born','torn','pork','cord','fort','port','storm','short','sport'];
+
+            let engPool = [];
+            if(week===1) {
+                if(day===1) engPool = eeList.concat(eaList);
+                else if(day===2) engPool = eeList.concat(eaExcList);
+                else engPool = eeList.concat(eaList, eaExcList);
+            } else if (week===2) {
+                if(day===1) engPool = aiList;
+                else if(day===2) engPool = ayList;
+                else engPool = aiList.concat(ayList);
+            } else if (week===3) {
+                if(day===1) engPool = oaList;
+                else if(day===2) engPool = owList;
+                else engPool = oaList.concat(owList);
+            } else if (week===4) {
+                if(day===1) engPool = arList;
+                else if(day===2) engPool = erirurList;
+                else if(day===3) engPool = orList;
+                else engPool = arList.concat(erirurList, orList);
+            }
+
+            let shuffledEng = shuffleArray(engPool);
+
+            for(let i=0; i<10; i++) {
+                if ((week===1 && day===5) || (week===2 && day===5) || (week===3 && day===5) || (week===4 && day===5)) {
+                    eng.push(`DICTATION (Teacher says, child writes): <strong>[ ${shuffledEng[i] || 'word'} ]</strong>`);
+                } else if ((week===2 && day===2) || (week===2 && day===4) || (week===3 && day===3) || (week===3 && day===4) || (week===4 && day===4)) {
+                    // Inject structural/comprehension tasks on specific days
+                    eng.push(`Structural/Comprehension writing task on worksheet.`);
+                } else {
+                    eng.push(`Decode out loud accurately: <strong>${shuffledEng[i] || 'word'}</strong>`);
+                }
+            }
+
+            return { math, eng };
+        }
+
+        // --- UI LOGIC ---
+        const sidebarMenu = document.getElementById('sidebar-menu');
+        const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+        let currentDayIndex = 0;
+
+        for (let w = 0; w < 4; w++) {
+            const weekDiv = document.createElement('div');
+            weekDiv.className = 'mb-2 border border-slate-200 rounded overflow-hidden bg-white';
+            
+            const weekBtn = document.createElement('button');
+            weekBtn.className = 'w-full text-left px-4 py-3 font-bold text-lg text-black bg-slate-200 hover:bg-slate-300 uppercase tracking-wider flex justify-between items-center transition-colors';
+            weekBtn.innerHTML = `<span>Week ${w + 1}</span> <svg class="w-5 h-5 transform transition-transform duration-200 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>`;
+            
+            const daysList = document.createElement('div');
+            daysList.className = 'hidden flex-col border-t border-slate-200 bg-slate-50';
+            
+            weekBtn.onclick = () => {
+                const isHidden = daysList.classList.contains('hidden');
+                document.querySelectorAll('#sidebar-menu > div > div').forEach(el => el.classList.add('hidden')); 
+                document.querySelectorAll('#sidebar-menu > div > button > svg').forEach(el => el.classList.remove('rotate-180'));
+                if (isHidden) {
+                    daysList.classList.remove('hidden');
+                    weekBtn.querySelector('svg').classList.add('rotate-180');
+                }
+            };
+            
+            for (let d = 0; d < 5; d++) {
+                const globalIndex = (w * 5) + d;
+                const dayBtn = document.createElement('button');
+                dayBtn.className = 'w-full text-left px-6 py-3 text-base font-medium text-black hover:bg-indigo-100 border-l-4 border-transparent hover:border-indigo-600 transition-colors day-selector border-b border-slate-100 last:border-b-0';
+                dayBtn.innerText = daysOfWeek[d];
+                dayBtn.onclick = (e) => {
+                    document.querySelectorAll('.day-selector').forEach(btn => {
+                        btn.classList.remove('bg-indigo-100', 'border-indigo-600', 'font-bold');
+                        btn.classList.add('border-transparent');
+                    });
+                    e.target.classList.remove('border-transparent');
+                    e.target.classList.add('bg-indigo-100', 'border-indigo-600', 'font-bold');
+                    loadDay(globalIndex, w + 1, daysOfWeek[d]);
+                };
+                daysList.appendChild(dayBtn);
+            }
+
+            weekDiv.appendChild(weekBtn);
+            weekDiv.appendChild(daysList);
+            sidebarMenu.appendChild(weekDiv);
+            
+            if(w === 0) weekBtn.click(); 
+        }
+        
+        setTimeout(() => {
+            const firstDay = document.querySelector('.day-selector');
+            if(firstDay) firstDay.click();
+        }, 50);
+
+        function switchTab(tabId) {
+            const mathSec = document.getElementById('section-math');
+            const engSec = document.getElementById('section-eng');
+            const enrichSec = document.getElementById('section-enrich');
+            const mathTab = document.getElementById('tab-math');
+            const engTab = document.getElementById('tab-eng');
+            const enrichTab = document.getElementById('tab-enrich');
+
+            mathSec.classList.add('hidden-content');
+            engSec.classList.add('hidden-content');
+            enrichSec.classList.add('hidden-content');
+            
+            mathTab.classList.remove('tab-active');
+            mathTab.classList.add('tab-inactive');
+            engTab.classList.remove('tab-active');
+            engTab.classList.add('tab-inactive');
+            enrichTab.classList.remove('tab-active');
+            enrichTab.classList.add('tab-inactive');
+
+            if(tabId === 'math') {
+                mathSec.classList.remove('hidden-content');
+                mathTab.classList.remove('tab-inactive');
+                mathTab.classList.add('tab-active');
+            } else if(tabId === 'eng') {
+                engSec.classList.remove('hidden-content');
+                engTab.classList.remove('tab-inactive');
+                engTab.classList.add('tab-active');
+            } else if(tabId === 'enrich') {
+                enrichSec.classList.remove('hidden-content');
+                enrichTab.classList.remove('tab-inactive');
+                enrichTab.classList.add('tab-active');
+            }
+        }
+
+        function loadDay(index, weekNum, dayName) {
+            currentDayIndex = index;
+            const data = rawData[index];
+            const tasks = generateTasks(index);
+            
+            document.getElementById('header-title').innerText = `Week ${weekNum} : ${dayName}`;
+            document.getElementById('header-subtitle').innerText = `Execution Day ${index + 1} of 20`;
+            
+            // Math
+            document.getElementById('math-goal').innerText = data.mathGoal;
+            document.getElementById('math-teacher').innerHTML = data.mathTeacher;
+            document.getElementById('math-activity').innerText = data.mathActivity;
+            
+            const mathList = document.getElementById('math-tasks');
+            mathList.innerHTML = '';
+            tasks.math.forEach((task, i) => {
+                mathList.innerHTML += `<li class="flex items-center border-b border-slate-200 pb-2"><span class="text-indigo-600 w-8 shrink-0 font-bold">${i+1}.</span> <span class="text-black">${task}</span></li>`;
+            });
+
+            // English
+            document.getElementById('eng-goal').innerText = data.engGoal;
+            document.getElementById('eng-teacher').innerHTML = data.engTeacher;
+            document.getElementById('eng-activity').innerText = data.engActivity;
+            
+            const engList = document.getElementById('eng-tasks');
+            engList.innerHTML = '';
+            tasks.eng.forEach((task, i) => {
+                engList.innerHTML += `<li class="flex items-center border-b border-slate-200 pb-2"><span class="text-emerald-600 w-8 shrink-0 font-bold">${i+1}.</span> <span class="text-black">${task}</span></li>`;
+            });
+
+            // Enrichment
+            document.getElementById('enrich-subject').innerText = data.enrichSubject;
+            document.getElementById('enrich-goal').innerText = data.enrichGoal;
+            document.getElementById('enrich-teacher').innerHTML = data.enrichTeacher;
+            document.getElementById('enrich-activity').innerText = data.enrichActivity;
+            document.getElementById('enrich-task').innerHTML = `<strong>Execution:</strong> ${data.enrichTask}`;
+
+            document.getElementById('placeholder').style.display = 'none';
+            document.getElementById('day-content').classList.remove('hidden-content');
+            
+            switchTab('math');
+        }
+    </script>
+</body>
+</html>
