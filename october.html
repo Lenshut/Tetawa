@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>October Curriculum - Tetawa School</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .sidebar-scroll { max-height: calc(100vh - 4rem); overflow-y: auto; }
+        .hidden-content { display: none !important; }
+        .tab-active { border-bottom: 4px solid #4f46e5; color: #000; font-weight: 700; background-color: #f5f3ff; }
+        .tab-inactive { color: #000; font-weight: 500; }
+        .tab-inactive:hover { background-color: #f8fafc; }
+    </style>
+</head>
+<body class="bg-slate-50 text-black font-sans h-screen flex overflow-hidden text-lg">
+
+    <!-- Sidebar -->
+    <aside class="w-72 bg-white border-r border-slate-200 flex flex-col z-20 shadow-sm">
+        <div class="p-6 border-b border-slate-200 bg-slate-900 text-white">
+            <h1 class="text-2xl font-bold tracking-tight">October</h1>
+        </div>
+        <div class="flex-1 sidebar-scroll p-4 space-y-2" id="sidebar-menu">
+            <!-- Populated via JS -->
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col h-screen overflow-hidden">
+        <header class="bg-white border-b border-slate-200 px-8 py-5 flex justify-between items-center shadow-sm z-10">
+            <div>
+                <h2 class="text-3xl font-bold text-black" id="header-title">Awaiting Selection</h2>
+                <p class="text-base text-black" id="header-subtitle">Select a day from the sidebar</p>
+            </div>
+            <a href="index.html" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded shadow-sm text-lg font-semibold transition-colors flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                Homepage
+            </a>
+        </header>
+
+        <div class="flex-1 overflow-y-auto bg-slate-50" id="content-area">
+            <!-- Empty State -->
+            <div id="placeholder" class="h-full flex flex-col items-center justify-center text-slate-400">
+                <svg class="w-20 h-20 mb-6 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                <p class="text-xl font-medium text-slate-500">Initiate execution by selecting a day.</p>
+            </div>
+
+            <!-- Content State -->
+            <div id="day-content" class="hidden-content max-w-5xl mx-auto p-8">
+                
+                <!-- Tabs -->
+                <div class="flex border-b border-slate-300 mb-8">
+                    <button onclick="switchTab('math')" id="tab-math" class="flex-1 py-4 text-xl text-center transition-colors tab-active text-black">
+                        Mathematics
+                    </button>
+                    <button onclick="switchTab('eng')" id="tab-eng" class="flex-1 py-4 text-xl text-center transition-colors tab-inactive border-l border-slate-200 text-black">
+                        English
+                    </button>
+                    <button onclick="switchTab('enrich')" id="tab-enrich" class="flex-1 py-4 text-xl text-center transition-colors tab-inactive border-l border-slate-200 text-black">
+                        Enrichment
+                    </button>
+                </div>
+
+                <!-- MATH SECTION -->
+                <div id="section-math" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="md:col-span-1 space-y-6">
+                            <section class="bg-white p-6 rounded shadow-sm border-l-4 border-indigo-600">
+                                <h3 class="text-lg font-bold text-black uppercase tracking-wider mb-2">Goal</h3>
+                                <p id="math-goal" class="text-black font-medium text-lg"></p>
+                            </section>
+                            <section class="bg-white p-6 rounded shadow-sm border-l-4 border-indigo-600">
+                                <h3 class="text-lg font-bold text-black uppercase tracking-wider mb-2">Activity</h3>
+                                <p id="math-activity" class="text-black text-base leading-relaxed"></p>
+                            </section>
+                        </div>
+                        <div class="md:col-span-2">
+                            <section class="bg-white p-6 rounded shadow-sm h-full border border-slate-200">
+                                <h3 class="text-lg font-bold text-black uppercase tracking-wider mb-4 border-b pb-2">Instruction</h3>
+                                <div id="math-teacher" class="prose prose-base prose-slate max-w-none text-black"></div>
+                            </section>
+                        </div>
+                    </div>
+                    <section class="bg-white p-6 rounded shadow-sm border border-slate-200 mt-6">
+                        <div class="flex justify-between items-center mb-6 border-b pb-4">
+                            <h3 class="text-xl font-bold text-black">Worksheet</h3>
+                            <span class="text-base font-bold bg-slate-200 text-black px-3 py-1 rounded">10 TASKS</span>
+                        </div>
+                        <ul id="math-tasks" class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 font-mono text-base list-none p-0 text-black"></ul>
+                    </section>
+                </div>
+
+                <!-- ENGLISH SECTION -->
+                <div id="section-eng" class="hidden-content space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="md:col-span-1 space-y-6">
+                            <section class="bg-white p-6 rounded shadow-sm border-l-4 border-emerald-500">
+                                <h3 class="text-lg font-bold text-black uppercase tracking-wider mb-2">Goal</h3>
+                                <p id="eng-goal" class="text-black font-medium text-lg"></p>
+                            </section>
+                            <section class="bg-white p-6 rounded shadow-sm border-l-4 border-emerald-500">
+                                <h3 class="text-lg font-bold text-black uppercase tracking-wider mb-2">Activity</h3>
+                                <p id="eng-activity" class="text-black text-base leading-relaxed"></p>
+                            </section>
+                        </div>
+                        <div class="md:col-span-2">
+                            <section class="bg-white p-6 rounded shadow-sm h-full border border-slate-200">
+                                <h3 class="text-lg font-bold text-black uppercase tracking-wider mb-4 border-b pb-2">Instruction</h3>
+                                <div id="eng-teacher" class="prose prose-base prose-slate max-w-none text-black"></div>
+                            </section>
+                        </div>
+                    </div>
+                    <section class="bg-white p-6 rounded shadow-sm border border-slate-200 mt-6">
+                        <div class="flex justify-between items-center mb-6 border-b pb-4">
+                            <h3 class="text-xl font-bold text-black">Worksheet</h3>
+                            <span class="text-base font-bold bg-slate-200 text-black px-3 py-1 rounded">10 TASKS</span>
+                        </div>
+                        <ul id="eng-tasks" class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 text-base list-none p-0 text-black"></ul>
+                    </section>
+                </div>
+
+                <!-- ENRICHMENT SECTION -->
+                <div id="section-enrich" class="hidden-content space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="md:col-span-1 space-y-6">
+                            <section class="bg-white p-6 rounded shadow-sm border-l-4 border-amber-500">
+                                <h3 class="text-lg font-bold text-black uppercase tracking-wider mb-2">Subject & Goal</h3>
+                                <div class="mb-3"><span id="enrich-subject" class="bg-amber-100 text-amber-900 font-bold px-3 py-1 rounded text-sm uppercase"></span></div>
+                                <p id="enrich-goal" class="text-black font-medium text-lg"></p>
+                            </section>
+                            <section class="bg-white p-6 rounded shadow-sm border-l-4 border-amber-500">
+                                <h3 class="text-lg font-bold text-black uppercase tracking-wider mb-2">Activity</h3>
+                                <p id="enrich-activity" class="text-black text-base leading-relaxed"></p>
+                            </section>
+                        </div>
+                        <div class="md:col-span-2">
+                            <section class="bg-white p-6 rounded shadow-sm h-full border border-slate-200">
+                                <h3 class="text-lg font-bold text-black uppercase tracking-wider mb-4 border-b pb-2">Instruction</h3>
+                                <div id="enrich-teacher" class="prose prose-base prose-slate max-w-none text-black"></div>
+                            </section>
+                        </div>
+                    </div>
+                    <section class="bg-white p-6 rounded shadow-sm border border-slate-200 mt-6">
+                        <div class="flex justify-between items-center mb-6 border-b pb-4">
+                            <h3 class="text-xl font-bold text-black">Comprehensive Task</h3>
+                            <span class="text-base font-bold bg-amber-200 text-amber-900 px-3 py-1 rounded">1 MASTER TASK</span>
+                        </div>
+                        <div class="p-6 bg-slate-50 border border-slate-200 rounded">
+                            <p id="enrich-task" class="text-xl font-medium text-black leading-relaxed"></p>
+                        </div>
+                    </section>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // --- OCTOBER 20-DAY RIGID DATA STRUCTURE ---
+        const rawData = [
+            // WEEK 1
+            {
+                mathGoal: "2-Digit by 2-Digit Multiplication (Area Model).",
+                mathTeacher: "Do not start with the standard algorithm. She will lose track of the zeros. Teach the Area Model (Box Method). 15 x 12. Break it into (10+5) and (10+2). Draw a 2x2 grid. Multiply the parts: 10x10=100, 10x5=50, 2x10=20, 2x5=10. Add them up: 180. This visualizes the distributive property.",
+                mathActivity: "Draw the 2x2 grid for every equation. Force her to write the four partial products inside the boxes before adding.",
+                
+                engGoal: "Possessive Apostrophes (Singular Nouns).",
+                engTeacher: "This is not a plural 's'. The apostrophe shows ownership. The dog's bone = the bone belonging to ONE dog. Ensure she places the apostrophe BEFORE the 's' for singular nouns. Indonesian lacks this structural equivalent; drill it heavily.",
+                engActivity: "Rewrite phrases. 'The tail of the cat' -> 'The cat's tail'.",
+                
+                enrichSubject: "Music",
+                enrichGoal: "Bass Clef Lines: G-B-D-F-A.",
+                enrichTeacher: "The Bass Clef is for low pitches. The 5 lines from bottom to top are G, B, D, F, A. Mnemonic: Good Boys Do Fine Always, or Great Big Dogs Fight Animals. She must commit this to memory.",
+                enrichActivity: "Draw a staff with a Bass Clef. Point to lines randomly for her to name.",
+                enrichTask: "Provide a blank Bass Clef staff. You draw 5 notes on the lines. She must write the correct letters (G, B, D, F, A) under them perfectly."
+            },
+            {
+                mathGoal: "2-Digit by 2-Digit Multiplication (Partial Products).",
+                mathTeacher: "Transition from the box grid to vertical partial products. Stack 15 and 12. Multiply 2x5=10, 2x10=20, 10x5=50, 10x10=100. Add vertically. This bridges the gap between the box and the standard algorithm.",
+                mathActivity: "Solve vertically, writing out all four partial product lines before summing.",
+                
+                engGoal: "Possessive Apostrophes (Plural Nouns).",
+                engTeacher: "If the noun is already plural and ends in 's' (dogs), the apostrophe goes AFTER the 's'. The dogs' bones = bones belonging to MULTIPLE dogs. This is a massive trap for ESL learners. Demand precision.",
+                engActivity: "Word sorting. Give her sentences and she must identify if it is one owner (boy's) or many owners (boys').",
+                
+                enrichSubject: "Social (PKN)",
+                enrichGoal: "Sumpah Pemuda: The Background (1928).",
+                enrichTeacher: "October is Sumpah Pemuda month. Before 1928, Indonesians fought as separate islands (Jong Java, Jong Ambon, etc.). The Dutch easily defeated them. The youth realized they had to unite to win. This is the foundation of the modern state.",
+                enrichActivity: "Look at pictures of the 1928 Youth Congress.",
+                enrichTask: "She must verbally explain why the Dutch were able to rule Indonesia for so long (because the tribes fought separately) and what the youth realized they had to do in 1928 (unite)."
+            },
+            {
+                mathGoal: "2-Digit by 2-Digit (Standard Algorithm intro).",
+                mathTeacher: "Now introduce the standard algorithm. 24 x 13. Multiply the top by 3. DROP A ZERO on the next line (the magic zero) because we are now multiplying by 10, not 1. Multiply the top by 1. Add the two lines. The 'magic zero' is non-negotiable.",
+                mathActivity: "Highlight the 'magic zero' in a bright color on every problem so she does not forget it.",
+                
+                engGoal: "Possessive vs. Plural Distinction.",
+                engTeacher: "Mix them up. Dogs (more than one). Dog's (belongs to one). Dogs' (belongs to many). If she writes 'The two dog's are barking', she fails the concept.",
+                engActivity: "Fill-in-the-blank sentences requiring the correct form of the word.",
+                
+                enrichSubject: "Science",
+                enrichGoal: "The Inner Planets (Rocky).",
+                enrichTeacher: "Mercury, Venus, Earth, Mars. These are the four closest to the sun. They are made of rock. Venus is the hottest (atmosphere traps heat). Earth has liquid water.",
+                enrichActivity: "Draw the sun and the four inner planets in order.",
+                enrichTask: "She must name the four inner planets in order from the Sun, and state one defining fact about Earth that makes it different from the other three (liquid water/life)."
+            },
+            {
+                mathGoal: "2-Digit by 2-Digit (Standard Algorithm Mastery).",
+                mathTeacher: "Drill the standard algorithm. Watch for carrying errors and forgotten zeros. Use graph paper to keep the columns strictly aligned. Sloppy writing causes 90% of multiplication errors.",
+                mathActivity: "Independent worksheet. 10 complex equations.",
+                
+                engGoal: "Proper Noun Possessives.",
+                engTeacher: "Names get apostrophes too. 'Budi's book.' 'Jakarta's traffic.' If a name ends in S (e.g., James), teach her to just add 's (James's). Keep it simple.",
+                engActivity: "Rewrite sentences transferring ownership to a specific person.",
+                
+                enrichSubject: "Music",
+                enrichGoal: "Bass Clef Spaces: A-C-E-G.",
+                enrichTeacher: "The 4 spaces in the Bass Clef from bottom to top are A, C, E, G. Mnemonic: All Cows Eat Grass.",
+                enrichActivity: "Draw a Bass Clef. Point to spaces randomly for her to name.",
+                enrichTask: "Provide a blank Bass Clef staff. Draw 4 notes in the spaces. She must write the letters A, C, E, G underneath and state the mnemonic."
+            },
+            {
+                mathGoal: "Week 1 Assessment: 2x2 Multiplication.",
+                mathTeacher: "Test the standard algorithm. Zero tolerance for missing place-value zeros.",
+                mathActivity: "Strict 15-minute test. No talking.",
+                
+                engGoal: "Week 1 Assessment: Possessives.",
+                engTeacher: "Dictate phrases. 'The boy's ball' vs 'The boys' balls'. She must use context clues to place the apostrophe correctly.",
+                engActivity: "Dictation and editing test.",
+                
+                enrichSubject: "Social (PKN)",
+                enrichGoal: "Sumpah Pemuda: Point 1 (Satu Tumpah Darah).",
+                enrichTeacher: "One Motherland. We acknowledge one land, the land of Indonesia. From Sabang to Merauke, it is all one soil.",
+                enrichActivity: "Read the first line of the Sumpah Pemuda text.",
+                enrichTask: "She must stand, use perfect posture, and formally recite the first line: 'Kami putra dan putri Indonesia, mengaku bertumpah darah yang satu, tanah Indonesia.'"
+            },
+            
+            // WEEK 2
+            {
+                mathGoal: "Division: Remainders as Fractions.",
+                mathTeacher: "Stop writing 'R 1'. A remainder is actually a fraction of the divisor. 5 ÷ 2. Two goes into 5 two times (4), with 1 left over. The 1 is the numerator, the divisor (2) is the denominator. Answer: 2 1/2. This is how real math handles remainders.",
+                mathActivity: "Solve simple division problems visually, then write the remainder as a fraction.",
+                
+                engGoal: "Suffixes: '-ness' (Noun forming).",
+                engTeacher: "'-ness' turns an adjective into a noun (state of being). Sad (adjective) -> Sadness (noun). Dark -> Darkness. Note spelling changes: if the base word ends in 'y', change 'y' to 'i' (happy -> happiness).",
+                engActivity: "Convert adjectives to nouns using -ness.",
+                
+                enrichSubject: "Music",
+                enrichGoal: "Sight Reading Bass Clef Mixed.",
+                enrichTeacher: "Combine the lines (GBDFA) and spaces (ACEG). She must visually determine if the note is on a line or space before applying the mnemonic.",
+                enrichActivity: "Flashcard drills mixing lines and spaces on the Bass Clef.",
+                enrichTask: "Provide a Bass Clef staff with 8 mixed notes. She has 60 seconds to correctly label all 8 notes."
+            },
+            {
+                mathGoal: "Long Division: Remainders as Fractions.",
+                mathTeacher: "Apply the fraction rule to the standard long division algorithm. 125 ÷ 4. Solve normally. The remainder becomes the numerator. The divisor (4) becomes the denominator. Result: 31 1/4.",
+                mathActivity: "Solve 3-digit long division equations and convert every remainder into a fraction.",
+                
+                engGoal: "Suffixes: '-ment' (Noun forming).",
+                engTeacher: "'-ment' turns a verb into a noun (the act or result of an action). Pay (verb) -> Payment (noun). Agree -> Agreement. Require her to identify the base verb.",
+                engActivity: "Convert verbs to nouns using -ment and verbally define them.",
+                
+                enrichSubject: "Social (PKN)",
+                enrichGoal: "Sumpah Pemuda: Point 2 (Satu Bangsa).",
+                enrichTeacher: "One Nation. Despite being Javanese, Batak, or Papuan, we belong to one overarching nation: Indonesia. Nationality supersedes ethnicity in public life.",
+                enrichActivity: "Read the second line of the Sumpah Pemuda text.",
+                enrichTask: "She must stand, use perfect posture, and formally recite the second line: 'Kami putra dan putri Indonesia, mengaku berbangsa yang satu, bangsa Indonesia.'"
+            },
+            {
+                mathGoal: "Division Word Problems (Fractional Answers).",
+                mathTeacher: "Apply logic. 'Budi has 15 liters of water to share equally among 4 buckets. How much per bucket?' Answer: 3 3/4 liters. She must understand that the remaining 3 liters are physically split.",
+                mathActivity: "Read word problems where a fractional remainder makes logical sense (like food or liquid).",
+                
+                engGoal: "Reading Comprehension: Author's Purpose (PIE).",
+                engTeacher: "Why did the author write this? Persuade (to make you believe something), Inform (to give facts), Entertain (to tell a story). Acronym: PIE. She must classify texts immediately.",
+                engActivity: "Read three short texts. Label them P, I, or E.",
+                
+                enrichSubject: "Science",
+                enrichGoal: "The Outer Planets (Gas Giants).",
+                enrichTeacher: "Jupiter, Saturn, Uranus, Neptune. They are massive and made mostly of gas. They have rings (Saturn's are just the most visible). They do not have solid surfaces to stand on.",
+                enrichActivity: "Draw the outer planets relative to the inner planets to show scale.",
+                enrichTask: "She must name the four outer planets and state the primary difference between them and the inner planets (Gas vs. Rock)."
+            },
+            {
+                mathGoal: "Division Logic: When to Ignore the Remainder.",
+                mathTeacher: "Context matters. '15 kids need cars. Each car holds 4 kids. How many cars are needed?' 15 ÷ 4 = 3 R 3. But you cannot rent 3 3/4 cars. You must rent 4 cars. Force her to think about the physical reality of the word problem.",
+                mathActivity: "Solve division problems and explicitly state if the remainder should be written as a fraction, rounded up, or ignored.",
+                
+                engGoal: "Writing: Using -ness and -ment.",
+                engTeacher: "Generate sentences using the new abstract nouns. 'The darkness was scary.' 'I waited for the payment.' Check for proper noun usage.",
+                engActivity: "Write 4 original sentences.",
+                
+                enrichSubject: "Music",
+                enrichGoal: "Introduction to Chords (Triads).",
+                enrichTeacher: "A chord is three or more notes played at the exact same time. The most basic is a Triad. Show her a C Major triad (C, E, G stacked like a snowman on the staff).",
+                enrichActivity: "Draw stacked notes on the staff.",
+                enrichTask: "She must draw a C Major triad (C-E-G) on a Treble Clef staff, ensuring the notes are stacked directly on top of each other, not side-by-side."
+            },
+            {
+                mathGoal: "Week 2 Assessment: Division and Remainders.",
+                mathTeacher: "Test converting remainders to fractions and logical word problems.",
+                mathActivity: "Strict 15-minute test.",
+                
+                engGoal: "Week 2 Assessment: Suffixes and PIE.",
+                engTeacher: "Dictate words ending in -ness and -ment. Provide short texts for Author's Purpose classification.",
+                engActivity: "Written test.",
+                
+                enrichSubject: "Social (PKN)",
+                enrichGoal: "Sumpah Pemuda: Point 3 (Satu Bahasa).",
+                enrichTeacher: "One Language. The most unifying decision. They chose Indonesian (Malay base) over Javanese (the majority) to ensure fairness and unity. It was a massive sacrifice of ego.",
+                enrichActivity: "Read the third line of the Sumpah Pemuda text.",
+                enrichTask: "She must stand, use perfect posture, and formally recite the third line: 'Kami putra dan putri Indonesia, menjunjung bahasa persatuan, bahasa Indonesia.'"
+            },
+
+            // WEEK 3
+            {
+                mathGoal: "Geometry: Points, Lines, and Rays.",
+                mathTeacher: "A Point is an exact location (a dot). A Line goes on forever in both directions (arrows on both ends). A Ray starts at a point and goes on forever in one direction (dot on one end, arrow on the other). Be pedantic about the symbols.",
+                mathActivity: "Draw and properly label Points, Lines, and Rays.",
+                
+                engGoal: "Suffixes: '-tion' and '-sion' (The Shun Sound).",
+                engTeacher: "This turns a verb into a noun. Act -> Action. Add -> Addition. It sounds like 'shun'. There is no 'sh'. She must visually memorize this spelling pattern.",
+                engActivity: "Convert base verbs to '-tion' nouns. Write them out three times each.",
+                
+                enrichSubject: "Music",
+                enrichGoal: "The Grand Staff Application.",
+                enrichTeacher: "Bring it all together. Right hand plays Treble, Left hand plays Bass. This is how real piano music is structured.",
+                enrichActivity: "Look at beginner piano sheet music.",
+                enrichTask: "Provide a Grand Staff with Middle C written on both the Treble and Bass sides. She must explain that both hands are pointing to the exact same physical key on the piano."
+            },
+            {
+                mathGoal: "Geometry: Types of Angles (Intro).",
+                mathTeacher: "An angle is formed when two rays share a point (vertex). Teach the Right Angle first. It is exactly 90 degrees. It forms a perfect 'L' or square corner. Use a piece of paper to check for right angles.",
+                mathActivity: "Find right angles in the room (corners of books, doors, tables).",
+                
+                engGoal: "Suffixes: Spelling changes with '-tion'.",
+                engTeacher: "If a base word ends with an 'e', drop the 'e' before adding '-tion'. Create -> Creation. Elevate -> Elevation. Enforce the spelling rule.",
+                engActivity: "Whiteboard dictation focusing on dropping the 'e'.",
+                
+                enrichSubject: "Social (PKN)",
+                enrichGoal: "Pahlawan Nasional: Ki Hajar Dewantara.",
+                enrichTeacher: "The father of Indonesian education. He fought the Dutch by opening schools (Taman Siswa) for native Indonesians, believing education is the ultimate weapon against colonialism.",
+                enrichActivity: "Discuss his famous motto: 'Tut Wuri Handayani' (from behind, a teacher gives encouragement).",
+                enrichTask: "She must name Ki Hajar Dewantara and verbally explain why opening a school was considered fighting against the colonizers."
+            },
+            {
+                mathGoal: "Geometry: Acute vs. Obtuse Angles.",
+                mathTeacher: "Compare everything to the Right Angle. An Acute angle is smaller/sharper than a Right angle (think 'cute' and small). An Obtuse angle is larger/wider than a Right angle.",
+                mathActivity: "Draw angles and use a square corner of paper to test if they are Acute, Right, or Obtuse.",
+                
+                engGoal: "Reading Comprehension: Fact finding in Informational Text.",
+                engTeacher: "Provide an 'Inform' text (e.g., a paragraph about volcanoes). She must extract explicit facts. Do not accept summarized answers; she must point to the exact sentence.",
+                engActivity: "Read text and answer explicit 'What' and 'Where' questions.",
+                
+                enrichSubject: "Science",
+                enrichGoal: "Phases of the Moon.",
+                enrichTeacher: "The moon does not make its own light; it reflects the sun. The phases (New, Half, Full) happen because the moon orbits Earth, changing the angle of the sunlight we see.",
+                enrichActivity: "Use a flashlight in a dark room shining on a ball while walking around it.",
+                enrichTask: "She must draw three moon phases: Full Moon (entirely lit), Half Moon, and New Moon (entirely dark), and explain that the light comes from the sun, not the moon."
+            },
+            {
+                mathGoal: "Geometry: Intersecting and Parallel Lines.",
+                mathTeacher: "Intersecting lines cross each other. Parallel lines NEVER cross (like train tracks), no matter how far they go. Perpendicular lines intersect at exactly 90-degree Right angles.",
+                mathActivity: "Draw parallel, intersecting, and perpendicular lines using a ruler.",
+                
+                engGoal: "Writing: Using '-tion' Nouns.",
+                engTeacher: "Generate sentences using action nouns. 'The subtraction was hard.' Check spelling and capitalization.",
+                engActivity: "Write 3 original sentences.",
+                
+                enrichSubject: "Music",
+                enrichGoal: "Playing a Triad.",
+                enrichTeacher: "Move the C Major triad to an instrument. She must press three keys simultaneously.",
+                enrichActivity: "Use a virtual piano.",
+                enrichTask: "She must physically press the C, E, and G keys on a keyboard at the exact same time to sound a C Major chord, holding it for 4 beats."
+            },
+            {
+                mathGoal: "Week 3 Assessment: Geometry Vocab.",
+                mathTeacher: "Test identification of lines, rays, and angle types.",
+                mathActivity: "Strict 15-minute test. No talking.",
+                
+                engGoal: "Week 3 Assessment: Suffixes.",
+                engTeacher: "Dictate words ending in -tion. Verify the dropped 'e' rule.",
+                engActivity: "Dictation test. 10 words.",
+                
+                enrichSubject: "Social (PKN)",
+                enrichGoal: "Reviewing Sumpah Pemuda (All 3 Points).",
+                enrichTeacher: "Consolidate the month's primary civic lesson.",
+                enrichActivity: "Practice the full recitation.",
+                enrichTask: "She must stand and formally recite the entire Sumpah Pemuda (all three points) flawlessly, from memory, with respect."
+            },
+
+            // WEEK 4
+            {
+                mathGoal: "Geometry Review: Shapes and Angles.",
+                mathTeacher: "Combine polygons with angle knowledge. A square has 4 Right angles. A triangle can have Acute or Obtuse angles. Analyze shapes by their corners.",
+                mathActivity: "Draw a square, a sharp triangle, and a wide hexagon. Label every inside angle as Acute, Right, or Obtuse.",
+                
+                engGoal: "Author's Purpose: Persuasive Language.",
+                engTeacher: "Identify words that signal a Persuasive text: 'should', 'must', 'best', 'worst'. These words signal opinions trying to change your mind.",
+                engActivity: "Highlight persuasive keywords in a short text.",
+                
+                enrichSubject: "Music",
+                enrichGoal: "Monthly Performance Prep.",
+                enrichTeacher: "Combine Treble Clef reading, Bass Clef reading, and basic rhythm.",
+                enrichActivity: "Review all clef mnemonics.",
+                enrichTask: "Provide a grand staff with one note on the Treble (e.g., G) and one on the Bass (e.g., C). She must name both correctly in under 10 seconds."
+            },
+            {
+                mathGoal: "Mixed Multiplication and Division Word Problems.",
+                mathTeacher: "Determine the operation. '25 boxes with 12 items each' (Multiply). '300 items split into 15 boxes' (Divide). She must write the equation before calculating.",
+                mathActivity: "Solve 10 mixed problems.",
+                
+                engGoal: "R-Controlled Exceptions: 'ear' and 'eer'.",
+                engTeacher: "Both make the /ɪər/ sound (the 'ear' sound). Hear, Year, Deer, Cheer. Notice this breaks the normal R-controlled vowel rules. She must visually memorize these.",
+                engActivity: "Word sorting. Dictate words, she must guess the 'ear' or 'eer' spelling.",
+                
+                enrichSubject: "Social (PKN)",
+                enrichGoal: "Pahlawan Nasional: Cut Nyak Dien.",
+                enrichTeacher: "A female warrior from Aceh who fought the Dutch for decades. Emphasize that Indonesian heroes include women who led armies, proving courage has no gender.",
+                enrichActivity: "Look at a photo/sketch of Cut Nyak Dien.",
+                enrichTask: "She must name Cut Nyak Dien and verbally explain that she is famous for leading a war against colonizers in Aceh, proving women are also national heroes."
+            },
+            {
+                mathGoal: "Math Logic: Multi-step problems.",
+                mathTeacher: "Combine geometry and multiplication. 'A rectangular room is 12m by 10m. What is the area? If tiles cost Rp 5,000 per sq m, what is the total cost?'",
+                mathActivity: "Work through 3 complex, multi-step problems together. Require explicit written steps.",
+                
+                engGoal: "Fluency and Editing Review.",
+                engTeacher: "Provide a paragraph riddled with possessive apostrophe errors and '-tion' spelling errors. She must correct it.",
+                engActivity: "Edit a paragraph with a red pen.",
+                
+                enrichSubject: "Science",
+                enrichGoal: "Stars and Constellations.",
+                enrichTeacher: "Stars are distant suns. A constellation is a human-made pattern (like connecting dots) to help navigate. The stars don't actually belong together; they just look like it from Earth.",
+                enrichActivity: "Look at a picture of Orion or the Big Dipper.",
+                enrichTask: "She must define what a star is (a burning sun far away) and what a constellation is (a picture made by connecting stars)."
+            },
+            {
+                mathGoal: "October Review: Area, Division, Angles.",
+                mathTeacher: "Comprehensive math review ahead of the final assessment.",
+                mathActivity: "Solve a mixed review worksheet.",
+                
+                engGoal: "October Review: Suffixes, Possessives, Purpose.",
+                engTeacher: "Comprehensive English review.",
+                engActivity: "Complete a mixed review worksheet.",
+                
+                enrichSubject: "Music",
+                enrichGoal: "October Performance Review.",
+                enrichTeacher: "Final test of musical knowledge for the month.",
+                enrichActivity: "Review Grand Staff and Triads.",
+                enrichTask: "The Grand Test: She must draw a Grand Staff, properly place a C Major Triad on the Treble Clef, and draw the Bass Clef note 'C' below it."
+            },
+            {
+                mathGoal: "October Final Assessment: Math.",
+                mathTeacher: "2x2 Multiplication, Division to Mixed Numbers, Lines, and Angles.",
+                mathActivity: "Strict 20-minute test. No talking.",
+                
+                engGoal: "October Final Assessment: English.",
+                engTeacher: "Possessives, Suffixes (-ness, -ment, -tion), Author's Purpose, and Editing.",
+                engActivity: "Strict 20-minute test. No talking.",
+                
+                enrichSubject: "Social (PKN)",
+                enrichGoal: "October Civic Review.",
+                enrichTeacher: "Summarize Sumpah Pemuda and the National Heroes.",
+                enrichActivity: "Verbal Q&A session.",
+                enrichTask: "She must deliver a 1-minute formal presentation standing up, defining the meaning of Sumpah Pemuda and explaining why figures like Soedirman and Cut Nyak Dien are heroes."
+            }
+        ];
+
+        // --- DYNAMIC TASK GENERATORS ---
+        function getRand(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+        function getRandNum(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+        
+        function shuffleArray(array) {
+            let shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        function generateTasks(dayIndex) {
+            let math = [];
+            let eng = [];
+            let week = Math.floor(dayIndex / 5) + 1;
+            let day = (dayIndex % 5) + 1;
+
+            // Math Logic for OCTOBER
+            if (week === 1) { // 2x2 Multiplication
+                for(let i=0; i<10; i++) {
+                    let d1 = getRandNum(12, 45); let d2 = getRandNum(12, 35);
+                    if (day === 1) {
+                        math.push(`Box Method: ${d1} x ${d2} = _______`);
+                    } else if (day === 2) {
+                        math.push(`Partial Products: ${d1} x ${d2} = _______`);
+                    } else {
+                        math.push(`Standard Alg: ${d1} x ${d2} = _______`);
+                    }
+                }
+            } 
+            else if (week === 2) { // Division -> Mixed Numbers
+                for(let i=0; i<10; i++) {
+                    let div = getRandNum(2, 6);
+                    let ans = getRandNum(12, 45);
+                    let rem = getRandNum(1, div - 1);
+                    let dividend = (div * ans) + rem;
+                    
+                    if (day === 3 || (day === 5 && i > 5)) {
+                        math.push(`Word Problem: ${dividend} liters into ${div} buckets. Amt: ___`);
+                    } else if (day === 4) {
+                        math.push(`Logic: ${dividend} kids, cars hold ${div}. Cars needed: ___`);
+                    } else {
+                        math.push(`Divide to Mixed Number: ${dividend} ÷ ${div} = _______`);
+                    }
+                }
+            }
+            else if (week === 3) { // Geometry: Lines & Angles
+                for(let i=0; i<10; i++) {
+                    if (day === 1) {
+                        let type = getRand(['Point', 'Line', 'Ray']);
+                        math.push(`Draw and label a: ${type}`);
+                    } else if (day === 2) {
+                        math.push(`Identify the angle: Exactly 90 degrees (L-shape) = _______`);
+                    } else if (day === 3 || day === 5) {
+                        let angle = getRand(['Sharper than 90', 'Wider than 90', 'Exactly 90']);
+                        math.push(`Classify angle (${angle}): _______`);
+                    } else if (day === 4) {
+                        let lineType = getRand(['Parallel', 'Intersecting', 'Perpendicular']);
+                        math.push(`Draw ${lineType} lines.`);
+                    }
+                }
+            }
+            else if (week === 4) { // Mixed Review & Logic
+                for(let i=0; i<10; i++) {
+                    if (day === 1) {
+                        let shape = getRand(['Square', 'Rectangle']);
+                        math.push(`What kind of angles are inside a ${shape}? _______`);
+                    } else if (day === 2 || day === 4 || day === 5) {
+                        let isDiv = getRand([true, false]);
+                        if(isDiv) {
+                            let div = getRandNum(3, 5); let ans = getRandNum(20, 50); let rem = getRandNum(1, div-1);
+                            math.push(`${(div*ans)+rem} ÷ ${div} = ___ ___/___`);
+                        } else {
+                            let d1 = getRandNum(15, 45); let d2 = getRandNum(12, 25);
+                            math.push(`${d1} x ${d2} = _______`);
+                        }
+                    } else if (day === 3) {
+                        math.push(`Multi-step problem to be completed on worksheet.`);
+                    }
+                }
+            }
+
+            // October English Pools
+            const possSingular = ["boy's", "dog's", "cat's", "teacher's", "bird's", "student's", "Budi's", "Siti's", "mom's", "dad's", "man's", "girl's"];
+            const possPlural = ["boys'", "dogs'", "cats'", "teachers'", "birds'", "students'", "kids'", "cars'", "trees'", "lions'", "friends'", "babies'"];
+            const nessList = ['sadness', 'darkness', 'sickness', 'happiness', 'weakness', 'madness', 'kindness', 'fitness', 'softness', 'sweetness', 'loudness', 'goodness'];
+            const mentList = ['payment', 'enjoyment', 'statement', 'agreement', 'movement', 'pavement', 'punishment', 'treatment', 'argument', 'amazement', 'equipment', 'basement'];
+            const tionList = ['action', 'fraction', 'addition', 'subtraction', 'station', 'fiction', 'nation', 'potion', 'motion', 'creation', 'direction', 'vacation'];
+            const earEerList = ['hear', 'year', 'dear', 'cheer', 'clear', 'near', 'fear', 'steer', 'sneer', 'gear', 'tear', 'rear'];
+            
+            let engPool = [];
+            if(week===1) {
+                if(day===1) engPool = possSingular;
+                else if(day===2) engPool = possPlural;
+                else engPool = possSingular.concat(possPlural);
+            } else if (week===2) {
+                if(day===1) engPool = nessList;
+                else if(day===2) engPool = mentList;
+                else engPool = nessList.concat(mentList);
+            } else if (week===3) {
+                engPool = tionList;
+            } else if (week===4) {
+                if(day===1 || day===3) engPool = earEerList;
+                else engPool = tionList.concat(nessList, mentList, possSingular); // Review
+            }
+
+            let shuffledEng = shuffleArray(engPool);
+
+            for(let i=0; i<10; i++) {
+                if ((week===1 && day===5) || (week===2 && day===5) || (week===3 && day===5) || (week===4 && day===5)) {
+                    eng.push(`DICTATION (Teacher says, child writes): <strong>[ ${shuffledEng[i] || 'word'} ]</strong>`);
+                } else if (week===1 && (day===1 || day===2 || day===3)) {
+                    let isSingular = engPool === possSingular || (engPool.length > 12 && getRand([true, false]));
+                    let word = isSingular ? getRand(possSingular) : getRand(possPlural);
+                    eng.push(`Identify owner (One or Many?): <strong>${word}</strong>`);
+                } else if (week===2 && day===3) {
+                    eng.push(`Author's Purpose: Label P, I, or E based on text reading.`);
+                } else if ((week===1 && day===4) || (week===2 && day===4) || (week===3 && day===4) || (week===4 && day===2) || (week===4 && day===4)) {
+                    eng.push(`Grammar, Writing, or Editing Task on worksheet.`);
+                } else {
+                    eng.push(`Decode/Analyze out loud accurately: <strong>${shuffledEng[i] || 'word'}</strong>`);
+                }
+            }
+
+            return { math, eng };
+        }
+
+        // --- UI LOGIC ---
+        const sidebarMenu = document.getElementById('sidebar-menu');
+        const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+        let currentDayIndex = 0;
+
+        for (let w = 0; w < 4; w++) {
+            const weekDiv = document.createElement('div');
+            weekDiv.className = 'mb-2 border border-slate-200 rounded overflow-hidden bg-white';
+            
+            const weekBtn = document.createElement('button');
+            weekBtn.className = 'w-full text-left px-4 py-3 font-bold text-lg text-black bg-slate-200 hover:bg-slate-300 uppercase tracking-wider flex justify-between items-center transition-colors';
+            weekBtn.innerHTML = `<span>Week ${w + 1}</span> <svg class="w-5 h-5 transform transition-transform duration-200 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>`;
+            
+            const daysList = document.createElement('div');
+            daysList.className = 'hidden flex-col border-t border-slate-200 bg-slate-50';
+            
+            weekBtn.onclick = () => {
+                const isHidden = daysList.classList.contains('hidden');
+                document.querySelectorAll('#sidebar-menu > div > div').forEach(el => el.classList.add('hidden')); 
+                document.querySelectorAll('#sidebar-menu > div > button > svg').forEach(el => el.classList.remove('rotate-180'));
+                if (isHidden) {
+                    daysList.classList.remove('hidden');
+                    weekBtn.querySelector('svg').classList.add('rotate-180');
+                }
+            };
+            
+            for (let d = 0; d < 5; d++) {
+                const globalIndex = (w * 5) + d;
+                const dayBtn = document.createElement('button');
+                dayBtn.className = 'w-full text-left px-6 py-3 text-base font-medium text-black hover:bg-indigo-100 border-l-4 border-transparent hover:border-indigo-600 transition-colors day-selector border-b border-slate-100 last:border-b-0';
+                dayBtn.innerText = daysOfWeek[d];
+                dayBtn.onclick = (e) => {
+                    document.querySelectorAll('.day-selector').forEach(btn => {
+                        btn.classList.remove('bg-indigo-100', 'border-indigo-600', 'font-bold');
+                        btn.classList.add('border-transparent');
+                    });
+                    e.target.classList.remove('border-transparent');
+                    e.target.classList.add('bg-indigo-100', 'border-indigo-600', 'font-bold');
+                    loadDay(globalIndex, w + 1, daysOfWeek[d]);
+                };
+                daysList.appendChild(dayBtn);
+            }
+
+            weekDiv.appendChild(weekBtn);
+            weekDiv.appendChild(daysList);
+            sidebarMenu.appendChild(weekDiv);
+            
+            if(w === 0) weekBtn.click(); 
+        }
+        
+        setTimeout(() => {
+            const firstDay = document.querySelector('.day-selector');
+            if(firstDay) firstDay.click();
+        }, 50);
+
+        function switchTab(tabId) {
+            const mathSec = document.getElementById('section-math');
+            const engSec = document.getElementById('section-eng');
+            const enrichSec = document.getElementById('section-enrich');
+            const mathTab = document.getElementById('tab-math');
+            const engTab = document.getElementById('tab-eng');
+            const enrichTab = document.getElementById('tab-enrich');
+
+            mathSec.classList.add('hidden-content');
+            engSec.classList.add('hidden-content');
+            enrichSec.classList.add('hidden-content');
+            
+            mathTab.classList.remove('tab-active');
+            mathTab.classList.add('tab-inactive');
+            engTab.classList.remove('tab-active');
+            engTab.classList.add('tab-inactive');
+            enrichTab.classList.remove('tab-active');
+            enrichTab.classList.add('tab-inactive');
+
+            if(tabId === 'math') {
+                mathSec.classList.remove('hidden-content');
+                mathTab.classList.remove('tab-inactive');
+                mathTab.classList.add('tab-active');
+            } else if(tabId === 'eng') {
+                engSec.classList.remove('hidden-content');
+                engTab.classList.remove('tab-inactive');
+                engTab.classList.add('tab-active');
+            } else if(tabId === 'enrich') {
+                enrichSec.classList.remove('hidden-content');
+                enrichTab.classList.remove('tab-inactive');
+                enrichTab.classList.add('tab-active');
+            }
+        }
+
+        function loadDay(index, weekNum, dayName) {
+            currentDayIndex = index;
+            const data = rawData[index];
+            const tasks = generateTasks(index);
+            
+            document.getElementById('header-title').innerText = `Week ${weekNum} : ${dayName}`;
+            document.getElementById('header-subtitle').innerText = `Execution Day ${index + 1} of 20`;
+            
+            // Math
+            document.getElementById('math-goal').innerText = data.mathGoal;
+            document.getElementById('math-teacher').innerHTML = data.mathTeacher;
+            document.getElementById('math-activity').innerText = data.mathActivity;
+            
+            const mathList = document.getElementById('math-tasks');
+            mathList.innerHTML = '';
+            tasks.math.forEach((task, i) => {
+                mathList.innerHTML += `<li class="flex items-center border-b border-slate-200 pb-2"><span class="text-indigo-600 w-8 shrink-0 font-bold">${i+1}.</span> <span class="text-black">${task}</span></li>`;
+            });
+
+            // English
+            document.getElementById('eng-goal').innerText = data.engGoal;
+            document.getElementById('eng-teacher').innerHTML = data.engTeacher;
+            document.getElementById('eng-activity').innerText = data.engActivity;
+            
+            const engList = document.getElementById('eng-tasks');
+            engList.innerHTML = '';
+            tasks.eng.forEach((task, i) => {
+                engList.innerHTML += `<li class="flex items-center border-b border-slate-200 pb-2"><span class="text-emerald-600 w-8 shrink-0 font-bold">${i+1}.</span> <span class="text-black">${task}</span></li>`;
+            });
+
+            // Enrichment
+            document.getElementById('enrich-subject').innerText = data.enrichSubject;
+            document.getElementById('enrich-goal').innerText = data.enrichGoal;
+            document.getElementById('enrich-teacher').innerHTML = data.enrichTeacher;
+            document.getElementById('enrich-activity').innerText = data.enrichActivity;
+            document.getElementById('enrich-task').innerHTML = `<strong>Execution:</strong> ${data.enrichTask}`;
+
+            document.getElementById('placeholder').style.display = 'none';
+            document.getElementById('day-content').classList.remove('hidden-content');
+            
+            switchTab('math');
+        }
+    </script>
+</body>
+</html>
